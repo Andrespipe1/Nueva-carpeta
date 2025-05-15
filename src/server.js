@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import cors from 'cors';
 import routerPacientes from './routers/Paciente_routes.js'
 import routerNutricionista from './routers/Nutricionista_routes.js'
-
+import authRoutes from './routers/Auth_routes.js';
 // Inicializaciones
 const app = express()
 dotenv.config()
@@ -22,7 +22,8 @@ app.get('/',(req,res)=>{
     res.send("Server on")
 })
 
-// Rutas para pacientes
+// Rutas
+app.use('/api',authRoutes)
 app.use('/api',routerPacientes)
 app.use('/api', routerNutricionista)
 // Manejo de una ruta que no sea encontrada

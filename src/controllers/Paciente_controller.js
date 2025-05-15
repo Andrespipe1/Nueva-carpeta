@@ -65,57 +65,6 @@ const crearNuevoPassword = async (req,res)=>{
     res.status(200).json({msg:"Felicitaciones, ya puedes iniciar sesión con tu nuevo password"}) 
 }
 
-const login = async (req, res) => {
-    const { email, password } = req.body;
-
-    // Validar si los campos están completos
-    if (Object.values(req.body).includes("")) {
-        return res.status(404).json({ msg: "Lo sentimos, debes llenar todos los campos" });
-    }
-
-    // Intentar encontrar el usuario primero como Paciente
-    let user = await Paciente.findOne({ email }).select("-status -__v -token -updatedAt -createdAt");
-
-    // Si no se encuentra como Paciente, buscar como Nutricionista
-    if (!user) {
-        user = await Nutricionista.findOne({ email }).select("-status -__v -token -updatedAt -createdAt");
-    }
-
-    // Si no se encuentra el usuario
-    if (!user) {
-        return res.status(404).json({ msg: "Lo sentimos, el usuario no se encuentra registrado" });
-    }
-
-    // Verificar si el email del paciente está confirmado, si es un paciente
-    if (user.rol === 'paciente' && user.confirmEmail === false) {
-        return res.status(403).json({ msg: "Lo sentimos, debe verificar su cuenta" });
-    }
-
-    // Verificar si la contraseña es correcta
-    const verificarPassword = await user.matchPassword(password);
-    if (!verificarPassword) {
-        return res.status(404).json({ msg: "Lo sentimos, el password no es el correcto" });
-    }
-
-    // Extraer los datos que quieres devolver del usuario
-    const { nombre, apellido, edad, direccion, celular, _id, rol } = user;
-
-    // Crear el token (función que asumo ya tienes implementada)
-    const token = crearTokenJWT(user._id, user.rol);
-
-    // Responder con la información del usuario y el token
-    return res.status(200).json({
-        token,
-        nombre,
-        apellido,
-        edad,
-        direccion,
-        celular,
-        _id,
-        email: user.email,
-        rol
-    });
-};
 
 const perfil =(req,res)=>{
     delete req.pacienteBDD.token
@@ -190,7 +139,6 @@ export {
     recuperarPassword,
     comprobarTokenPasword,
     crearNuevoPassword,
-    login,
     perfil,
     actualizarPerfil,
     actualizarPassword,
