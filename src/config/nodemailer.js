@@ -26,7 +26,7 @@ const sendMailToRegister = (userMail, token) => {
                 <p>Estamos emocionados de que formes parte de nuestra comunidad de salud y bienestar.</p>
                 <p>Para completar tu registro y comenzar a monitorear tu nutrición y actividad física, por favor confirma tu cuenta:</p>
                 
-                <a href="${process.env.URL_FRONTEND}confirmar/${token}" 
+                <a href="${process.env.URL_FRONTEND}/confirmar/${token}" 
                    style="display: inline-block; padding: 10px 20px; background-color: #2e7d32; color: white; text-decoration: none; border-radius: 5px; margin: 15px 0;">
                    Confirmar mi cuenta
                 </a>
